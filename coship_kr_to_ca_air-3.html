@@ -1,0 +1,2682 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="format-detection" content="telephone=no" />
+<title>캐나다쉬핑 | 한국 → 캐나다 항공택배 접수</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" onerror="window.__daumLoadFail=true"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #DC2626;
+    --red-dark: #B91C1C;
+    --red-light: #FEF2F2;
+    --red-border: #FCA5A5;
+    --gray-900: #1F2937;
+    --gray-800: #2D2D2D;
+    --gray-700: #374151;
+    --gray-600: #4B5563;
+    --gray-500: #6B7280;
+    --gray-400: #9CA3AF;
+    --gray-300: #D1D5DB;
+    --gray-200: #E5E7EB;
+    --gray-100: #F3F4F6;
+    --gray-50:  #F9FAFB;
+    --white: #FFFFFF;
+    --accent-blue: #EFF6FF;
+    --accent-blue-border: #BFDBFE;
+    --warning-bg: #FFFBEB;
+    --warning-border: #FCD34D;
+    --warning-text: #92400E;
+    --danger-bg: #FEF2F2;
+    --danger-border: #F87171;
+    --danger-text: #991B1B;
+    --success-bg: #ECFDF5;
+    --success-border: #6EE7B7;
+    --success-text: #065F46;
+  }
+
+  html, body { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-900);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ───── HEADER ───── */
+  header {
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 14px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .header-inner {
+    max-width: 920px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .logo-wrap { display: flex; align-items: center; gap: 12px; }
+  .logo-img {
+    height: 36px;
+    width: auto;
+    display: block;
+  }
+  .header-title {
+    font-size: 0.78rem;
+    color: var(--gray-500);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .header-title strong {
+    color: var(--gray-900);
+    font-weight: 700;
+  }
+
+  /* ───── PROGRESS ───── */
+  .progress-wrap {
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+    padding: 0 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .progress {
+    display: flex;
+    max-width: 920px;
+    margin: 0 auto;
+    gap: 4px;
+  }
+  .step-tab {
+    flex: 1;
+    min-width: 110px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 6px;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--gray-400);
+    font-size: 0.78rem;
+    font-weight: 500;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .step-tab .num {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--gray-200);
+    color: var(--gray-500);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .step-tab.active {
+    color: var(--red);
+    border-bottom-color: var(--red);
+    font-weight: 700;
+  }
+  .step-tab.active .num {
+    background: var(--red);
+    color: var(--white);
+  }
+  .step-tab.done {
+    color: var(--gray-700);
+  }
+  .step-tab.done .num {
+    background: var(--gray-800);
+    color: var(--white);
+  }
+  .step-tab.done .num::before {
+    content: "✓";
+  }
+  .step-tab.done .num span { display: none; }
+
+  /* ───── MAIN ───── */
+  main {
+    max-width: 860px;
+    margin: 28px auto 80px;
+    padding: 0 16px;
+  }
+
+  .panel { display: none; animation: fadeUp 0.3s ease both; }
+  .panel.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 28px 30px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03);
+    margin-bottom: 16px;
+    border: 1px solid var(--gray-200);
+  }
+  .card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--red);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .ico {
+    width: 30px; height: 30px;
+    background: var(--red-light);
+    color: var(--red);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+  }
+  .card-sub {
+    font-size: 0.82rem;
+    color: var(--gray-500);
+    margin-top: -16px;
+    margin-bottom: 22px;
+    line-height: 1.6;
+  }
+
+  /* ───── GRID ───── */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .span2 { grid-column: span 2; }
+  .span3 { grid-column: span 3; }
+  .span4 { grid-column: span 4; }
+
+  /* ───── INPUTS ───── */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--gray-700);
+    letter-spacing: -0.005em;
+  }
+  label .req { color: var(--red); margin-left: 2px; }
+  label .opt {
+    font-size: 0.7rem;
+    color: var(--gray-400);
+    font-weight: 400;
+    margin-left: 4px;
+  }
+
+  input, select, textarea {
+    font-family: inherit;
+    font-size: 0.92rem;
+    border: 1.5px solid var(--gray-300);
+    border-radius: 8px;
+    padding: 11px 13px;
+    color: var(--gray-900);
+    background: var(--white);
+    transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none;
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(220,38,38,0.12);
+  }
+  input.invalid { border-color: var(--red); background: var(--red-light); }
+  input::placeholder, textarea::placeholder { color: var(--gray-400); }
+  select {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236B7280' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+  textarea { resize: vertical; min-height: 76px; line-height: 1.6; }
+
+  .hint {
+    font-size: 0.72rem;
+    color: var(--gray-500);
+    margin-top: 2px;
+    line-height: 1.5;
+  }
+  /* ───── 주소 검색 ───── */
+  .addr-search-row {
+    display: flex; gap: 8px;
+  }
+  .addr-search-row input {
+    flex: 1; min-width: 0;
+  }
+  .btn-addr-search {
+    flex-shrink: 0;
+    background: var(--gray-900);
+    color: var(--white);
+    border: none;
+    border-radius: 8px;
+    padding: 0 16px;
+    font-family: inherit;
+    font-size: 0.86rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+  }
+  .btn-addr-search:hover {
+    background: var(--red);
+  }
+
+  /* ───── 박스 입력 카드 ───── */
+  .box-card {
+    background: var(--gray-50);
+    border: 1.5px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    position: relative;
+    transition: border-color 0.15s;
+  }
+  .box-card.has-fee {
+    border-color: var(--red-border);
+    background: linear-gradient(180deg, var(--white) 0%, var(--red-light) 100%);
+  }
+  .box-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .box-card-title {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--gray-900);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .box-card-title .box-num {
+    background: var(--red);
+    color: var(--white);
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    font-size: 0.78rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+  }
+  .box-card-del {
+    background: none;
+    border: none;
+    color: var(--red);
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    transition: all 0.15s;
+  }
+  .box-card-del:hover { background: var(--red-light); }
+  .box-card-del[disabled] { color: var(--gray-300); cursor: not-allowed; }
+  .box-card-del[disabled]:hover { background: none; }
+
+  .box-mini-fee {
+    margin-top: 12px;
+    padding: 10px 12px;
+    background: var(--red);
+    color: var(--white);
+    border-radius: 8px;
+    font-size: 0.82rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .box-mini-fee .k { opacity: 0.85; font-weight: 500; }
+  .box-mini-fee .v { font-weight: 800; font-size: 0.95rem; }
+  .box-mini-fee.warn {
+    background: #FFFBEB;
+    color: var(--warning-text);
+    border: 1px solid var(--warning-border);
+  }
+
+  /* ───── 발송 제한 인지 체크 ───── */
+  .restrict-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 8px;
+    transition: background 0.15s;
+  }
+  .restrict-row:hover { background: var(--gray-50); }
+  .restrict-row input[type="checkbox"] { display: none; }
+  .restrict-row .chk-box {
+    width: 22px; height: 22px;
+    min-width: 22px;
+    border: 2px solid var(--gray-300);
+    border-radius: 5px;
+    margin-top: 14px;
+    background: var(--white);
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .restrict-row.on .chk-box {
+    border-color: var(--red);
+    background: var(--red);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10'%3E%3Cpath d='M1 5l3.5 3.5L11 1' stroke='white' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 12px 10px;
+  }
+
+  .err-msg {
+    font-size: 0.72rem;
+    color: var(--red);
+    margin-top: 2px;
+    display: none;
+  }
+  .err-msg.show { display: block; }
+
+  /* phone with flag */
+  .phone-wrap { position: relative; }
+  .phone-wrap .flag-prefix {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .phone-wrap input { padding-left: 42px; }
+
+  /* ───── RADIO CARDS ───── */
+  .radio-grid { display: grid; gap: 10px; }
+  .radio-grid.cols2 { grid-template-columns: 1fr 1fr; }
+  .radio-card {
+    border: 1.5px solid var(--gray-300);
+    border-radius: 10px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: var(--white);
+  }
+  .radio-card:hover { border-color: var(--red-border); background: var(--gray-50); }
+  .radio-card.selected {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+  /* 네이티브 input 숨기기 */
+  .radio-card input[type="radio"],
+  .check-card input[type="checkbox"] { display: none; }
+
+  /* 커스텀 마커 — 카드 왼쪽에 동그라미/사각형 */
+  .radio-card::before {
+    content: '';
+    width: 18px; height: 18px;
+    min-width: 18px;
+    border: 2px solid var(--gray-300);
+    border-radius: 50%;
+    margin-top: 3px;
+    transition: all 0.15s;
+    background: var(--white);
+  }
+  .radio-card.selected::before {
+    border-color: var(--red);
+    background: var(--red);
+    box-shadow: inset 0 0 0 3px var(--white);
+  }
+  .check-card::before {
+    content: '';
+    width: 18px; height: 18px;
+    min-width: 18px;
+    border: 2px solid var(--gray-300);
+    border-radius: 4px;
+    margin-top: 3px;
+    transition: all 0.15s;
+    background: var(--white);
+    flex-shrink: 0;
+  }
+  .check-card.checked::before {
+    border-color: var(--red);
+    background: var(--red);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10'%3E%3Cpath d='M1 5l3.5 3.5L11 1' stroke='white' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 10px 8px;
+  }
+  .radio-card .rc-body { flex: 1; min-width: 0; }
+  .radio-card .rc-title {
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--gray-900);
+    margin-bottom: 3px;
+  }
+  .radio-card .rc-desc {
+    font-size: 0.76rem;
+    color: var(--gray-500);
+    line-height: 1.55;
+  }
+  .radio-card .rc-tag {
+    display: inline-block;
+    background: var(--red);
+    color: var(--white);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.66rem;
+    font-weight: 700;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  /* ───── CHECKBOX CARD ───── */
+  .check-card {
+    border: 1.5px solid var(--gray-300);
+    border-radius: 10px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: var(--white);
+  }
+  .check-card:hover { border-color: var(--red-border); background: var(--gray-50); }
+  .check-card.checked {
+    border-color: var(--red);
+    background: var(--red-light);
+  }
+
+  /* ───── NOTICES ───── */
+  .notice {
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 0.83rem;
+    line-height: 1.7;
+    margin-bottom: 18px;
+    border: 1.5px solid;
+  }
+  .notice strong { font-weight: 700; }
+  .notice.info {
+    background: var(--accent-blue);
+    border-color: var(--accent-blue-border);
+    color: #1E40AF;
+  }
+  .notice.warn {
+    background: var(--warning-bg);
+    border-color: var(--warning-border);
+    color: var(--warning-text);
+  }
+  .notice.danger {
+    background: var(--danger-bg);
+    border-color: var(--danger-border);
+    color: var(--danger-text);
+  }
+  .notice.success {
+    background: var(--success-bg);
+    border-color: var(--success-border);
+    color: var(--success-text);
+  }
+  .notice ul { margin: 6px 0 0 18px; }
+  .notice li { margin: 2px 0; }
+
+  /* ───── ITEM ROW ───── */
+  .item-header {
+    display: grid;
+    grid-template-columns: 2.2fr 0.8fr 1fr 1fr 40px;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding: 0 4px;
+  }
+  .item-header span {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .item-row {
+    display: grid;
+    grid-template-columns: 2.2fr 0.8fr 1fr 1fr 40px;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .item-row input { padding: 9px 11px; font-size: 0.86rem; }
+  .item-sub { background: var(--gray-50) !important; font-weight: 600; }
+  .btn-del {
+    background: var(--red-light);
+    border: 1.5px solid var(--red-border);
+    border-radius: 6px;
+    color: var(--red);
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    font-weight: 700;
+    transition: all 0.15s;
+  }
+  .btn-del:hover { background: var(--red); color: var(--white); }
+  .btn-add {
+    background: var(--white);
+    border: 1.5px dashed var(--red-border);
+    border-radius: 10px;
+    padding: 12px;
+    color: var(--red);
+    font-size: 0.86rem;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.15s;
+    margin-top: 6px;
+  }
+  .btn-add:hover { background: var(--red-light); border-color: var(--red); }
+
+  .item-total {
+    margin-top: 16px;
+    padding: 14px 18px;
+    background: var(--gray-50);
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .item-total .lbl {
+    font-size: 0.82rem;
+    color: var(--gray-600);
+    font-weight: 600;
+  }
+  .item-total .val {
+    font-size: 1.15rem;
+    color: var(--gray-900);
+    font-weight: 700;
+  }
+  .item-total .val .small {
+    font-size: 0.8rem;
+    color: var(--gray-500);
+    font-weight: 500;
+    margin-left: 6px;
+  }
+
+  /* ───── FEE CALCULATOR ───── */
+  .fee-box {
+    background: linear-gradient(135deg, #FEF2F2 0%, #FFF5F5 100%);
+    border: 1.5px solid var(--red-border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 8px;
+  }
+  .fee-box-title {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--red-dark);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .fee-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px 0;
+    font-size: 0.88rem;
+  }
+  .fee-row .k { color: var(--gray-600); }
+  .fee-row .v { font-weight: 600; color: var(--gray-900); }
+  .fee-row.sub { font-size: 0.8rem; }
+  .fee-row.sub .k { color: var(--gray-500); padding-left: 10px; }
+  .fee-row.sub .v { color: var(--gray-700); font-weight: 500; }
+  .fee-divider {
+    height: 1px;
+    background: var(--red-border);
+    margin: 8px 0;
+    opacity: 0.5;
+  }
+  .fee-row.total {
+    padding-top: 10px;
+    font-size: 1rem;
+  }
+  .fee-row.total .k { font-weight: 700; color: var(--gray-900); }
+  .fee-row.total .v { font-size: 1.35rem; color: var(--red); font-weight: 900; }
+  .fee-note {
+    margin-top: 10px;
+    font-size: 0.72rem;
+    color: var(--gray-500);
+    line-height: 1.55;
+  }
+  .fee-empty {
+    text-align: center;
+    color: var(--gray-400);
+    font-size: 0.85rem;
+    padding: 30px 10px;
+  }
+
+  /* ───── SUMMARY ───── */
+  .sum-section { margin-bottom: 18px; }
+  .sum-section h3 {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--gray-500);
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .sum-edit {
+    background: none;
+    border: none;
+    color: var(--red);
+    font-size: 0.72rem;
+    cursor: pointer;
+    font-weight: 600;
+    text-decoration: underline;
+    padding: 2px 4px;
+  }
+  .sum-row {
+    display: flex;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--gray-200);
+    font-size: 0.85rem;
+    gap: 12px;
+  }
+  .sum-row:last-child { border-bottom: none; }
+  .sum-row .sk { color: var(--gray-500); width: 130px; flex-shrink: 0; font-size: 0.78rem; }
+  .sum-row .sv {
+    font-weight: 500;
+    color: var(--gray-900);
+    flex: 1;
+    word-break: break-word;
+  }
+
+  /* ───── BUTTONS ───── */
+  .btn-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .btn-row.end { justify-content: flex-end; }
+  .btn {
+    font-family: inherit;
+    font-size: 0.93rem;
+    font-weight: 700;
+    padding: 13px 26px;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 1.5px solid transparent;
+    letter-spacing: -0.01em;
+    min-height: 46px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .btn-prev {
+    background: var(--white);
+    border-color: var(--gray-300);
+    color: var(--gray-600);
+  }
+  .btn-prev:hover:not(:disabled) {
+    border-color: var(--gray-700);
+    color: var(--gray-900);
+  }
+  .btn-next {
+    background: var(--red);
+    color: var(--white);
+    box-shadow: 0 4px 12px rgba(220,38,38,0.25);
+  }
+  .btn-next:hover:not(:disabled) {
+    background: var(--red-dark);
+    box-shadow: 0 6px 16px rgba(220,38,38,0.32);
+  }
+  .btn-submit {
+    background: var(--gray-900);
+    color: var(--white);
+    box-shadow: 0 4px 12px rgba(17,24,39,0.25);
+    padding: 14px 32px;
+    font-size: 0.98rem;
+  }
+  .btn-submit:hover:not(:disabled) {
+    background: #000;
+  }
+
+  /* agree box */
+  .agree-box {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 0.78rem;
+    color: var(--gray-600);
+    line-height: 1.75;
+    max-height: 140px;
+    overflow-y: auto;
+    margin-bottom: 12px;
+  }
+  .agree-box a { color: var(--red); text-decoration: underline; }
+
+  /* ───── 약관 동의 체크행 ───── */
+  .check-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.86rem;
+    margin-bottom: 8px;
+    padding: 8px 0;
+    color: var(--gray-700);
+    line-height: 1.5;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .check-row:last-of-type { border-bottom: none; }
+  /* 네이티브 체크박스 숨기기 */
+  .check-row input[type="checkbox"] { display: none; }
+  /* 커스텀 체크 아이콘 */
+  .check-row .chk-box {
+    width: 20px; height: 20px;
+    min-width: 20px;
+    border: 2px solid var(--gray-300);
+    border-radius: 4px;
+    margin-top: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: var(--white);
+    flex-shrink: 0;
+  }
+  .check-row input[type="checkbox"]:checked + .chk-box,
+  .check-row.on .chk-box {
+    border-color: var(--red);
+    background: var(--red);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 10'%3E%3Cpath d='M1 5l3.5 3.5L11 1' stroke='white' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 10px 8px;
+  }
+  .check-row .chk-label {
+    cursor: pointer;
+    flex: 1;
+    user-select: none;
+  }
+  .check-row .req { color: var(--red); font-weight: 700; }
+  .check-row a { color: var(--red); text-decoration: underline; }
+
+  /* honeypot */
+  .hp-field {
+    position: absolute !important;
+    left: -9999px !important;
+    width: 1px !important;
+    height: 1px !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* ───── DONE SCREEN ───── */
+  .done-screen { text-align: center; padding: 50px 20px; }
+  .done-icon {
+    width: 80px; height: 80px;
+    background: var(--success-bg);
+    border: 2px solid var(--success-border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.2rem;
+    margin: 0 auto 20px;
+    color: var(--success-text);
+  }
+  .done-screen h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--gray-900);
+    margin-bottom: 10px;
+    letter-spacing: -0.02em;
+  }
+  .done-screen p {
+    color: var(--gray-600);
+    font-size: 0.92rem;
+    line-height: 1.75;
+  }
+  .ref-num {
+    background: var(--red-light);
+    border: 1.5px solid var(--red-border);
+    border-radius: 10px;
+    padding: 14px 28px;
+    display: inline-block;
+    margin: 20px auto;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--red-dark);
+    letter-spacing: 0.06em;
+    font-family: 'SF Mono', Monaco, Consolas, monospace;
+  }
+  .done-info {
+    margin-top: 24px;
+    padding: 18px;
+    background: var(--gray-50);
+    border-radius: 10px;
+    text-align: left;
+    font-size: 0.84rem;
+    color: var(--gray-700);
+    line-height: 1.8;
+  }
+  .done-info strong { color: var(--gray-900); }
+  .done-info a { color: var(--red); text-decoration: none; font-weight: 600; }
+
+  /* spinner */
+  .spinner {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: var(--white);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* badge */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-left: 6px;
+  }
+  .badge.red { background: var(--red); color: var(--white); }
+  .badge.warn { background: var(--warning-border); color: var(--warning-text); }
+  .badge.ok { background: var(--success-border); color: var(--success-text); }
+
+  /* loading overlay */
+  .loading-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(255,255,255,0.85);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .loading-overlay.show { display: flex; }
+  .loading-overlay .spinner-big {
+    width: 40px; height: 40px;
+    border: 3px solid var(--gray-200);
+    border-top-color: var(--red);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  .loading-overlay p {
+    color: var(--gray-700);
+    font-size: 0.92rem;
+    font-weight: 500;
+  }
+
+  /* ───── MOBILE ───── */
+  @media (max-width: 720px) {
+    header { padding: 12px 16px; }
+    .logo-img { height: 30px; }
+    .header-title { display: none; }
+    .card { padding: 22px 18px; border-radius: 12px; }
+    .grid2, .grid3, .grid4 { grid-template-columns: 1fr; }
+    .span2, .span3, .span4 { grid-column: span 1; }
+    .radio-grid.cols2 { grid-template-columns: 1fr; }
+    .item-header { display: none; }
+    .item-row {
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      padding: 12px;
+      background: var(--gray-50);
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .item-row > *:nth-child(1) {
+      grid-column: span 2;
+    }
+    .item-row > *:nth-child(5) {
+      grid-column: span 2;
+      width: 100%;
+      height: 40px;
+    }
+    .item-row::before {
+      content: attr(data-label);
+      display: none;
+    }
+    .step-tab {
+      min-width: 90px;
+      font-size: 0.74rem;
+      padding: 12px 4px;
+    }
+    .step-tab .num { width: 22px; height: 22px; font-size: 0.7rem; }
+    .btn { font-size: 0.88rem; padding: 12px 20px; }
+    main { margin: 16px auto 60px; }
+    .card-title { font-size: 0.98rem; }
+    .sum-row .sk { width: 100px; font-size: 0.74rem; }
+    .sum-row { font-size: 0.82rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header>
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <img class="logo-img" id="logo-img" alt="COSHIP 캐나다쉬핑" />
+    </div>
+    <div class="header-title">
+      <strong>한국 → 캐나다</strong> 항공택배 접수
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════ PROGRESS ═══════════ -->
+<div class="progress-wrap">
+  <div class="progress">
+    <div class="step-tab active" id="tab-1" data-step="1"><div class="num"><span>1</span></div>발송인</div>
+    <div class="step-tab" id="tab-2" data-step="2"><div class="num"><span>2</span></div>수취인</div>
+    <div class="step-tab" id="tab-3" data-step="3"><div class="num"><span>3</span></div>박스/운임</div>
+    <div class="step-tab" id="tab-4" data-step="4"><div class="num"><span>4</span></div>신고품목</div>
+    <div class="step-tab" id="tab-5" data-step="5"><div class="num"><span>5</span></div>부가서비스</div>
+    <div class="step-tab" id="tab-6" data-step="6"><div class="num"><span>6</span></div>검토/제출</div>
+  </div>
+</div>
+
+<main>
+
+<!-- ═══════════ STEP 1 : 발송인 (한국) ═══════════ -->
+<div class="panel active" id="panel-1">
+
+  <div class="notice info">
+    <strong>📋 안내:</strong> 한국에서 캐나다로 보내는 항공택배 접수 양식입니다.
+    배송 소요기간은 입고 후 영업일 기준 약 <strong>3~5일</strong>이며, 통관 상황에 따라 변동될 수 있습니다.
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="ico">📦</div>발송인 정보 (한국)</div>
+
+    <div class="grid2">
+      <div class="field">
+        <label>한글 성함 <span class="req">*</span></label>
+        <input type="text" id="s_name_kr" placeholder="홍길동" autocomplete="name" />
+      </div>
+      <div class="field">
+        <label>영문 성함 <span class="req">*</span></label>
+        <input type="text" id="s_name_en" placeholder="HONG, GIL DONG" autocomplete="name" />
+      </div>
+
+      <div class="field">
+        <label>한국 연락처 <span class="req">*</span></label>
+        <div class="phone-wrap">
+          <span class="flag-prefix">🇰🇷</span>
+          <input type="text" inputmode="numeric" id="s_phone" placeholder="010-1234-5678" maxlength="13" autocomplete="tel" />
+        </div>
+        <div class="err-msg" id="s_phone_err">올바른 형식이 아닙니다 (예: 010-1234-5678)</div>
+      </div>
+
+      <div class="field">
+        <label>이메일 <span class="req">*</span></label>
+        <input type="email" id="s_email" placeholder="example@email.com" autocomplete="email" />
+        <div class="hint">접수 확인 메일 및 송장번호 안내를 받으실 주소입니다</div>
+        <div class="err-msg" id="s_email_err">올바른 이메일 형식이 아닙니다</div>
+      </div>
+
+      <div class="field span2">
+        <label>한국 주소 <span class="req">*</span></label>
+        <div class="addr-search-row">
+          <input type="text" id="s_addr1" placeholder="주소 검색 버튼을 눌러주세요" readonly autocomplete="street-address" />
+          <button type="button" class="btn-addr-search" onclick="searchKoreaAddress('s_addr1','s_zip')">주소검색</button>
+        </div>
+      </div>
+      <div class="field span2">
+        <label>상세주소 <span class="opt">(선택)</span></label>
+        <input type="text" id="s_addr2" placeholder="동/호수 또는 건물명" />
+      </div>
+
+      <div class="field">
+        <label>우편번호 <span class="opt">(자동 입력)</span></label>
+        <input type="text" inputmode="numeric" id="s_zip" placeholder="자동입력" maxlength="5" autocomplete="postal-code" readonly />
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="ico">🚚</div>한국 측 집하 방법</div>
+
+    <div class="radio-grid cols2" id="pickup-grp">
+      <div class="radio-card selected" data-pickup="dropoff">
+        <input type="radio" name="pickup_type" value="dropoff" checked />
+        <div class="rc-body">
+          <div class="rc-title">한국지사 직접 입고 <span class="rc-tag">기본</span></div>
+          <div class="rc-desc">
+            경기도 고양시 일산동구 고봉로 678번길 146 (성석동)<br>
+            TEL: 02-2043-5000
+          </div>
+        </div>
+      </div>
+      <div class="radio-card" data-pickup="domestic">
+        <input type="radio" name="pickup_type" value="domestic" />
+        <div class="rc-body">
+          <div class="rc-title">국내택배 픽업 요청</div>
+          <div class="rc-desc">
+            서울·경기 수도권 한정<br>
+            픽업 일정은 별도 안내드립니다
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="pickup-extra" style="display:none;margin-top:18px;padding:16px;background:var(--gray-50);border-radius:10px">
+      <div class="grid2">
+        <div class="field span2">
+          <label>픽업 주소</label>
+          <div class="addr-search-row">
+            <input type="text" id="pickup_addr" placeholder="주소 검색 버튼을 눌러주세요" readonly />
+            <button type="button" class="btn-addr-search" onclick="searchKoreaAddress('pickup_addr',null)">주소검색</button>
+          </div>
+          <div class="hint">발송인 한국 주소와 다른 경우 입력</div>
+        </div>
+        <div class="field span2">
+          <label>픽업 상세주소 <span class="opt">(선택)</span></label>
+          <input type="text" id="pickup_addr2" placeholder="동/호수 또는 건물명" />
+        </div>
+        <div class="field">
+          <label>희망 픽업 날짜</label>
+          <input type="date" id="pickup_date" />
+        </div>
+        <div class="field">
+          <label>택배 발송인 연락처</label>
+          <input type="text" inputmode="numeric" id="pickup_phone" placeholder="010-0000-0000" maxlength="13" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row end">
+    <button class="btn btn-next" onclick="nextStep(1)">다음 단계 →</button>
+  </div>
+</div>
+
+<!-- ═══════════ STEP 2 : 수취인 (캐나다) ═══════════ -->
+<div class="panel" id="panel-2">
+
+  <div class="card">
+    <div class="card-title"><div class="ico">🏠</div>수취인 정보 (캐나다)</div>
+
+    <div class="grid2">
+      <div class="field">
+        <label>영문 성함 <span class="req">*</span></label>
+        <input type="text" id="r_name_en" placeholder="HONG, GIL DONG" />
+      </div>
+      <div class="field">
+        <label>한글 성함 <span class="opt">(선택)</span></label>
+        <input type="text" id="r_name_kr" placeholder="홍길동" />
+      </div>
+
+      <div class="field">
+        <label>캐나다 연락처 <span class="req">*</span></label>
+        <div class="phone-wrap">
+          <span class="flag-prefix">🇨🇦</span>
+          <input type="text" inputmode="numeric" id="r_phone" placeholder="604-123-4567" maxlength="12" />
+        </div>
+        <div class="err-msg" id="r_phone_err">올바른 형식이 아닙니다 (예: 604-123-4567)</div>
+      </div>
+
+      <div class="field">
+        <label>이메일 <span class="opt">(선택)</span></label>
+        <input type="email" id="r_email" placeholder="recipient@email.com" />
+        <div class="hint">Tracking 정보 및 통관 안내 수신용</div>
+      </div>
+
+      <div class="field span2">
+        <label>주소 (Street Address) <span class="req">*</span></label>
+        <input type="text" id="r_addr1" placeholder="123 Main Street, Unit 456" />
+      </div>
+
+      <div class="field">
+        <label>도시 (City) <span class="req">*</span></label>
+        <input type="text" id="r_city" placeholder="Vancouver" />
+      </div>
+      <div class="field">
+        <label>주 (Province) <span class="req">*</span></label>
+        <select id="r_prov">
+          <option value="">선택하세요</option>
+          <option value="BC">British Columbia (BC)</option>
+          <option value="ON">Ontario (ON)</option>
+          <option value="AB">Alberta (AB)</option>
+          <option value="QC">Quebec (QC)</option>
+          <option value="MB">Manitoba (MB)</option>
+          <option value="SK">Saskatchewan (SK)</option>
+          <option value="NS">Nova Scotia (NS)</option>
+          <option value="NB">New Brunswick (NB)</option>
+          <option value="NL">Newfoundland and Labrador (NL)</option>
+          <option value="PE">Prince Edward Island (PE)</option>
+          <option value="NT">Northwest Territories (NT)</option>
+          <option value="YT">Yukon (YT)</option>
+          <option value="NU">Nunavut (NU)</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>우편번호 (Postal Code) <span class="req">*</span></label>
+        <input type="text" id="r_zip" placeholder="V6B 1A1" maxlength="7" style="text-transform:uppercase" />
+        <div class="hint">예: V6B 1A1 (자동 형식 변환)</div>
+        <div class="err-msg" id="r_zip_err">캐나다 우편번호 형식이 아닙니다 (A1A 1A1)</div>
+      </div>
+      <div class="field">
+        <label>국가</label>
+        <input type="text" value="CANADA" readonly style="background:var(--gray-100);color:var(--gray-500)" />
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="ico">📍</div>캐나다 측 수령 방법</div>
+
+    <div class="radio-grid" id="delivery-grp">
+      <div class="radio-card selected" data-delivery="ups_door">
+        <input type="radio" name="delivery_type" value="ups_door" checked />
+        <div class="rc-body">
+          <div class="rc-title">UPS Door-to-Door 배송 <span class="rc-tag">기본</span></div>
+          <div class="rc-desc">
+            입력하신 캐나다 주소로 UPS 직접 배송됩니다. 가장 일반적인 옵션입니다.<br>
+            통관 시 세금(GST/PST) 및 Brokerage Fee가 수취인에게 별도 청구됩니다.
+          </div>
+        </div>
+      </div>
+      <div class="radio-card" data-delivery="pickup_hq">
+        <input type="radio" name="delivery_type" value="pickup_hq" />
+        <div class="rc-body">
+          <div class="rc-title">캐나다쉬핑 본사 픽업</div>
+          <div class="rc-desc">
+            1501 Hartley Ave, Coquitlam, BC<br>
+            TEL: 604-455-1000 / 월~금 8AM~5PM
+          </div>
+        </div>
+      </div>
+      <div class="radio-card" data-delivery="pickup_lougheed">
+        <input type="radio" name="delivery_type" value="pickup_lougheed" />
+        <div class="rc-body">
+          <div class="rc-title">로히드 택배방 픽업</div>
+          <div class="rc-desc">
+            #205-219, 4501 North Road, Burnaby, BC (한남마트 상가 2층 제주도 옆)<br>
+            월~토 10AM~4:30PM (수요일 휴무)
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-prev" onclick="prevStep(2)">← 이전</button>
+    <button class="btn btn-next" onclick="nextStep(2)">다음 단계 →</button>
+  </div>
+</div>
+
+<!-- ═══════════ STEP 3 : 박스/운임 ═══════════ -->
+<div class="panel" id="panel-3">
+
+  <div class="notice info">
+    <strong>💡 운임 안내:</strong>
+    실 무게와 부피 무게(가로×세로×높이÷5000) 중 <strong>더 큰 값</strong>이 청구 기준이 됩니다.
+    아래 정보를 입력하시면 예상 운임이 자동 계산됩니다.
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="ico">⚖️</div>박스 정보</div>
+    <div class="card-sub">
+      각 박스마다 무게와 크기를 입력하시면 박스별 운임이 자동 계산됩니다.
+      여러 박스를 보내실 경우 <strong>"박스 추가"</strong> 버튼을 눌러 박스별로 입력해 주세요.
+    </div>
+
+    <div id="boxes-wrap"></div>
+
+    <button type="button" class="btn-add" onclick="addBox()">+ 박스 추가</button>
+
+    <div class="field" style="margin-top:18px">
+      <label>전체 특이사항 / 취급 주의 <span class="opt">(선택)</span></label>
+      <textarea id="box_note" placeholder="깨지기 쉬운 물건, 합포장 요청 사항 등을 자유롭게 적어주세요"></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="ico">💰</div>예상 운임 (실시간 계산)</div>
+
+    <div id="fee-display">
+      <div class="fee-empty">박스 무게와 사이즈를 입력하시면<br>예상 운임이 자동으로 계산됩니다</div>
+    </div>
+
+    <div class="fee-note" style="margin-top:14px;padding:12px;background:var(--gray-50);border-radius:8px">
+      ※ 실시간 계산된 운임은 <strong>참고용</strong>이며, 실제 운임은 입고 후 측정된 중량·부피 기준으로 확정됩니다.<br>
+      ※ 25kg 초과 화물은 별도 문의 부탁드립니다.<br>
+      ※ 캐나다 통관 시 세금 및 Brokerage Fee는 수취인 부담으로 별도 발생합니다.
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-prev" onclick="prevStep(3)">← 이전</button>
+    <button class="btn btn-next" onclick="nextStep(3)">다음 단계 →</button>
+  </div>
+</div>
+
+<!-- ═══════════ STEP 4 : 신고품목 ═══════════ -->
+<div class="panel" id="panel-4">
+
+  <div class="notice warn">
+    <strong>📋 통관 유의사항:</strong> 캐나다 통관 기준에 따라 품목명 및 가격을 정확히 기재해 주세요.
+    <ul>
+      <li>품목명은 <strong>구체적인 영문</strong>으로 작성해 주세요 (예: "T-shirt", "Skin care cream", "Children's book")</li>
+      <li>품목별 단가는 <strong>CAD(캐나다 달러)</strong> 기준으로 입력해 주세요</li>
+      <li>면세 기준은 발송 방식 및 원산지에 따라 다르며, <strong>CA$20 이하라도 발송 품목에 따라 세금이 부과될 수 있습니다</strong></li>
+      <li>통관 시 세금(GST/HST) 외에 특송사의 통관 수수료(Brokerage Fee)가 별도로 발생할 수 있습니다</li>
+      <li>허위 신고 또는 통관 제한 품목의 경우 통관 지연·반송·폐기될 수 있으며, 관련 비용은 발송인 또는 수취인 부담입니다</li>
+    </ul>
+  </div>
+
+  <div id="prohibited-warning" style="display:none"></div>
+
+  <div class="card">
+    <div class="card-title"><div class="ico">📝</div>INVOICE & PACKING LIST</div>
+    <div class="card-sub">
+      각 박스별 대표 품목을 구체적인 영문으로 작성해 주세요. 단가는 <strong>CAD</strong> 기준입니다.
+    </div>
+
+    <div class="item-header">
+      <span>품목명 (영문)</span>
+      <span>수량</span>
+      <span>단가 (CAD)</span>
+      <span>소계 (CAD)</span>
+      <span></span>
+    </div>
+    <div id="items-wrap">
+      <div class="item-row">
+        <input type="text" placeholder="e.g. Clothing, Book" class="item-name" oninput="checkProhibited()" />
+        <input type="text" inputmode="numeric" placeholder="1" class="item-qty" oninput="calcRow(this)" />
+        <input type="text" inputmode="decimal" placeholder="0.00" class="item-price" oninput="calcRow(this)" />
+        <input type="text" placeholder="0.00" class="item-sub" readonly />
+        <button class="btn-del" onclick="delRow(this)" type="button">✕</button>
+      </div>
+    </div>
+    <button class="btn-add" onclick="addRow()" type="button">+ 품목 추가</button>
+
+    <div class="item-total" id="item-total-box">
+      <div>
+        <div class="lbl">총 수량 (Total QTY)</div>
+        <div class="val" id="total-qty">0 <span class="small">개</span></div>
+      </div>
+      <div style="text-align:right">
+        <div class="lbl">총 신고 금액 (CAD)</div>
+        <div class="val" id="total-val">CA$ 0.00</div>
+      </div>
+    </div>
+
+    <div id="duty-warning" style="margin-top:14px"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="ico">🚫</div>한국 → 캐나다 항공택배 발송 제한 안내</div>
+    <div class="card-sub">
+      아래 항목을 확인하시고 <strong>각 항목 옆 체크박스</strong>에 체크해 주세요. 모두 확인 후 다음 단계로 진행됩니다.
+    </div>
+
+    <div class="restrict-row" id="restrict-row-1" onclick="toggleRestrict('restrict-1')">
+      <input type="checkbox" id="restrict-1" />
+      <div class="chk-box"></div>
+      <div class="notice danger" style="margin:0;flex:1">
+        <strong>❌ 발송 불가 (항공 보안 규정):</strong>
+        가스류, 압축 스프레이, 일회용 라이터, 본드, 향수, 알코올 포함 화장품 및 소독약, 주류, 담배
+      </div>
+    </div>
+
+    <div class="restrict-row" id="restrict-row-2" onclick="toggleRestrict('restrict-2')">
+      <input type="checkbox" id="restrict-2" />
+      <div class="chk-box"></div>
+      <div class="notice danger" style="margin:0;flex:1">
+        <strong>❌ 발송 불가 (검역 규정):</strong>
+        육류 및 육류 베이스 제품 (라면 스프, 육포, 가공육, 소시지, 햄 등 — 캐나다 식품검역청 CFIA 규제)
+      </div>
+    </div>
+
+    <div class="restrict-row" id="restrict-row-3" onclick="toggleRestrict('restrict-3')">
+      <input type="checkbox" id="restrict-3" />
+      <div class="chk-box"></div>
+      <div class="notice warn" style="margin:0;flex:1">
+        <strong>⚠️ 해외 통관 제한 (사전 문의 필수):</strong>
+        조리 식품(김치, 장류, 건조나물/어패류), 발효식품(효소액기스), 씨앗류
+      </div>
+    </div>
+
+    <div class="restrict-row" id="restrict-row-4" onclick="toggleRestrict('restrict-4')">
+      <input type="checkbox" id="restrict-4" />
+      <div class="chk-box"></div>
+      <div class="notice info" style="margin:0;flex:1">
+        <strong>📋 MSDS 제출 시 발송 가능:</strong>
+        리튬배터리가 내장된 충전식 제품 (노트북, 손선풍기, 랜턴, 마사지기 등)
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-prev" onclick="prevStep(4)">← 이전</button>
+    <button class="btn btn-next" onclick="nextStep(4)">다음 단계 →</button>
+  </div>
+</div>
+
+<!-- ═══════════ STEP 5 : 부가서비스 ═══════════ -->
+<div class="panel" id="panel-5">
+
+  <div class="card">
+    <div class="card-title"><div class="ico">🛡️</div>보상조건 안내</div>
+
+    <div class="notice info" style="margin-bottom:0">
+      <strong>전체 분실 시 최대 CAD 100 범위 내 신고금액 기준의 기본 책임배상이 적용됩니다.</strong><br>
+      부분분실, 파손, 포장미흡, 전자제품, 액체, 천재지변, 배송지연, 세관압류 등의 건은 보상대상에서 제외될 수 있습니다.<br>
+      <span style="font-size:0.78rem;color:var(--gray-600)">※ 신고가액 보험 가입 요청 시 별도 문의 바랍니다 — kor@coship.ca</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="ico">📦</div>추가 서비스 (선택)</div>
+    <div class="card-sub">
+      해당하는 항목이 있으시면 체크해 주세요. 별도 요금이 추가됩니다.
+    </div>
+
+    <div class="radio-grid">
+      <label class="check-card" data-extra="repack">
+        <input type="checkbox" name="extra_repack" />
+        <div class="rc-body">
+          <div class="rc-title">재포장 / 합포장 요청 <span class="badge warn">+10,000원/박스</span></div>
+          <div class="rc-desc">
+            여러 곳에서 입고된 물품을 합쳐서 재포장 (당사 종이 박스 기준)
+          </div>
+        </div>
+      </label>
+      <label class="check-card" data-extra="danpla">
+        <input type="checkbox" name="extra_danpla" />
+        <div class="rc-body">
+          <div class="rc-title">단프라 박스(플라스틱) 이용 <span class="badge warn">+20,000원/박스</span></div>
+          <div class="rc-desc">
+            견고한 플라스틱 박스로 포장 (이민가방 대용으로 추천)
+          </div>
+        </div>
+      </label>
+      <label class="check-card" data-extra="multi">
+        <input type="checkbox" name="extra_multi" />
+        <div class="rc-body">
+          <div class="rc-title">합배송 입고 (6건 이상) <span class="badge warn">+2,000원/건</span></div>
+          <div class="rc-desc">
+            5건까지는 무료, 6건째부터 건당 2,000원이 부과됩니다
+          </div>
+        </div>
+      </label>
+      <label class="check-card" data-extra="remote">
+        <input type="checkbox" name="extra_remote" />
+        <div class="rc-body">
+          <div class="rc-title">캐나다 외곽 / 소도시 배송 <span class="badge warn">+35,000원/건</span></div>
+          <div class="rc-desc">
+            우편번호 사전 조회 후 외곽 지역 해당 시 안내드립니다
+          </div>
+        </div>
+      </label>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="ico">💵</div>최종 예상 운임</div>
+    <div id="final-fee-display">
+      <div class="fee-empty">박스 정보가 입력되어야 표시됩니다</div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-prev" onclick="prevStep(5)">← 이전</button>
+    <button class="btn btn-next" onclick="nextStep(5)">다음 단계 →</button>
+  </div>
+</div>
+
+<!-- ═══════════ STEP 6 : 검토/제출 ═══════════ -->
+<div class="panel" id="panel-6">
+
+  <div class="notice info">
+    <strong>✅ 최종 확인:</strong>
+    입력하신 내용을 다시 한번 확인해 주세요. 각 섹션 우측의 <strong>"수정"</strong>을 누르면 해당 단계로 이동합니다.
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="ico">📋</div>접수 내용 검토</div>
+
+    <div class="sum-section">
+      <h3>① 발송인 (한국) <button class="sum-edit" onclick="showStep(1)" type="button">수정</button></h3>
+      <div class="sum-row"><span class="sk">성함</span><span class="sv" id="sum-s-name">—</span></div>
+      <div class="sum-row"><span class="sk">연락처</span><span class="sv" id="sum-s-phone">—</span></div>
+      <div class="sum-row"><span class="sk">이메일</span><span class="sv" id="sum-s-email">—</span></div>
+      <div class="sum-row"><span class="sk">주소</span><span class="sv" id="sum-s-addr">—</span></div>
+      <div class="sum-row"><span class="sk">집하 방법</span><span class="sv" id="sum-pickup">—</span></div>
+    </div>
+
+    <div class="sum-section">
+      <h3>② 수취인 (캐나다) <button class="sum-edit" onclick="showStep(2)" type="button">수정</button></h3>
+      <div class="sum-row"><span class="sk">성함</span><span class="sv" id="sum-r-name">—</span></div>
+      <div class="sum-row"><span class="sk">연락처</span><span class="sv" id="sum-r-phone">—</span></div>
+      <div class="sum-row"><span class="sk">이메일</span><span class="sv" id="sum-r-email">—</span></div>
+      <div class="sum-row"><span class="sk">주소</span><span class="sv" id="sum-r-addr">—</span></div>
+      <div class="sum-row"><span class="sk">수령 방법</span><span class="sv" id="sum-delivery">—</span></div>
+    </div>
+
+    <div class="sum-section">
+      <h3>③ 박스 정보 <button class="sum-edit" onclick="showStep(3)" type="button">수정</button></h3>
+      <div class="sum-row"><span class="sk">박스 수</span><span class="sv" id="sum-box-cnt">—</span></div>
+      <div class="sum-row"><span class="sk">박스별 정보</span><span class="sv" id="sum-weight">—</span></div>
+      <div class="sum-row"><span class="sk">특이사항</span><span class="sv" id="sum-note">—</span></div>
+      <span id="sum-dim" style="display:none"></span>
+      <span id="sum-pack" style="display:none"></span>
+    </div>
+
+    <div class="sum-section">
+      <h3>④ 신고품목 <button class="sum-edit" onclick="showStep(4)" type="button">수정</button></h3>
+      <div class="sum-row"><span class="sk">총 수량</span><span class="sv" id="sum-total-qty">—</span></div>
+      <div class="sum-row"><span class="sk">총 신고금액</span><span class="sv" id="sum-total-val">—</span></div>
+      <div class="sum-row"><span class="sk">품목 목록</span><span class="sv" id="sum-items">—</span></div>
+    </div>
+
+    <div class="sum-section">
+      <h3>⑤ 부가 서비스 <button class="sum-edit" onclick="showStep(5)" type="button">수정</button></h3>
+      <div class="sum-row"><span class="sk">추가 서비스</span><span class="sv" id="sum-extra">—</span></div>
+    </div>
+
+    <div class="sum-section">
+      <h3>💰 예상 운임 (참고용)</h3>
+      <div id="sum-fee-box"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="ico">📜</div>약관 동의</div>
+
+    <div class="agree-box">
+      본 서비스 이용과 관련하여 다음 사항에 동의합니다.<br><br>
+      1. 발송인은 신청서에 기재된 내용이 사실임을 확인합니다.<br>
+      2. 캐나다 관세법에 의거 품목 및 가격 허위 기재 시 발생하는 불이익에 대해 발송인이 책임을 집니다.<br>
+      3. 발송 불가 품목(가스, 스프레이, 라이터, 본드, 향수, 알코올 포함 화장품, 주류, 담배 등) 포함 시 폐기될 수 있으며 이로 인한 손실에 대해 당사는 책임지지 않습니다.<br>
+      4. 보상은 전체 분실 시 CAD 100 한도 내 신고금액 기준이며, 부분분실, 파손, 포장미흡, 전자제품, 액체, 천재지변, 배송지연, 세관압류 등은 보상 대상에서 제외될 수 있습니다.<br>
+      5. 개인정보는 배송 서비스 제공 목적으로만 사용되며 통관 및 운송 위탁사(UPS 등)에 제공됩니다.<br>
+      6. 배송 일정은 항공 스케줄 및 통관 상황에 따라 변동될 수 있습니다.<br>
+      7. 자세한 내용은 <a href="https://www.coship.ca/ko/termsandconditions" target="_blank" rel="noopener">이용약관</a> 및 <a href="https://www.coship.ca/ko/privacypolicy" target="_blank" rel="noopener">개인정보처리방침</a>을 참고해 주세요.
+    </div>
+
+    <div class="check-row" id="agree-row-1" onclick="toggleAgree('agree1')">
+      <input type="checkbox" id="agree1" />
+      <div class="chk-box"></div>
+      <span class="chk-label">
+        <a href="https://www.coship.ca/ko/termsandconditions" target="_blank" rel="noopener" onclick="event.stopPropagation()">이용약관</a>을 모두 읽었으며 동의합니다 <span class="req">(필수)</span>
+      </span>
+    </div>
+    <div class="check-row" id="agree-row-2" onclick="toggleAgree('agree2')">
+      <input type="checkbox" id="agree2" />
+      <div class="chk-box"></div>
+      <span class="chk-label">신청서에 기재된 품목 및 가격이 사실이며 발송 불가/제한 품목이 포함되지 않았음을 확인합니다 <span class="req">(필수)</span></span>
+    </div>
+    <div class="check-row" id="agree-row-3" onclick="toggleAgree('agree3')">
+      <input type="checkbox" id="agree3" />
+      <div class="chk-box"></div>
+      <span class="chk-label">
+        <a href="https://www.coship.ca/ko/privacypolicy" target="_blank" rel="noopener" onclick="event.stopPropagation()">개인정보 수집 및 이용</a>에 동의합니다 <span class="req">(필수)</span>
+      </span>
+    </div>
+
+    <!-- HONEYPOT (spam bots fill this; humans don't see it) -->
+    <div class="hp-field" aria-hidden="true">
+      <label>웹사이트 (입력하지 마세요)</label>
+      <input type="text" id="hp_website" tabindex="-1" autocomplete="off" />
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-prev" onclick="prevStep(6)">← 이전</button>
+    <button class="btn btn-submit" id="submit-btn" onclick="submitForm()">접수 신청 완료 ✓</button>
+  </div>
+</div>
+
+<!-- ═══════════ DONE SCREEN ═══════════ -->
+<div class="panel" id="panel-done">
+  <div class="card done-screen">
+    <div class="done-icon">✓</div>
+    <h2>접수가 완료되었습니다!</h2>
+    <p>
+      입력하신 이메일로 접수 확인 메일이 발송되었습니다.<br>
+      담당자가 확인 후 영업일 기준 1~2일 내에 연락드리겠습니다.
+    </p>
+    <div class="ref-num" id="ref-num"></div>
+    <div class="done-info">
+      <strong>📞 문의처</strong><br>
+      • 한국지사: 02-2043-5000<br>
+      • 캐나다 본사: 604-455-1000<br>
+      • 이메일: <a href="mailto:kor@coship.ca">kor@coship.ca</a><br>
+      • 카카오톡 채널: <a href="http://pf.kakao.com/_dLNBd/chat" target="_blank" rel="noopener">캐나다쉬핑</a><br><br>
+      <strong>📍 한국지사 입고지 주소</strong><br>
+      경기도 고양시 일산동구 고봉로 678번길 146 (성석동) 캐나다쉬핑 (10251)<br>
+      <span style="color:var(--red);font-weight:600">※ 택배 입고 시 송장 외에 박스 상단에 화주명과 연락처를 꼭 기재해 주세요</span>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<!-- loading overlay -->
+<div class="loading-overlay" id="loading-overlay">
+  <div class="spinner-big"></div>
+  <p>접수 중입니다... 잠시만 기다려 주세요</p>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════
+   COSHIP 한국 → 캐나다 항공택배 접수 폼
+   ════════════════════════════════════════════════════════════════
+   
+   ⚠️ 배포 전 반드시 채워야 할 값:
+   
+   1. APPS_SCRIPT_URL
+      Google Apps Script를 "웹 앱"으로 배포한 후 받는 URL
+      예: 'https://script.google.com/macros/s/AKfycby.../exec'
+      ※ 배포 방법:
+        - Apps Script 편집기 → 배포 → 새 배포
+        - 유형: 웹 앱 / 실행: 나 / 액세스: 모든 사용자
+   
+   2. (선택) RECAPTCHA_SITE_KEY
+      Google reCAPTCHA v3에서 발급받은 사이트 키
+      비워두면 reCAPTCHA 검증 없이 honeypot만 작동
+      발급: https://www.google.com/recaptcha/admin
+   
+   3. (선택, v1.1에서 추가 예정) GOOGLE_PLACES_API_KEY
+      Google Places Autocomplete용. 현재는 수기 입력 사용.
+   ════════════════════════════════════════════════════════════════ */
+
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwSJ3U37Kk83TIMvw019owKHWMRzrNDUmRi3DP3xAC9mV-K-mBqke2r2AKEbgxPH2FI/exec';
+const RECAPTCHA_SITE_KEY = ''; // 비워두면 reCAPTCHA 검증 생략
+const COMPANY_EMAIL = 'kor@coship.ca';
+const COMPANY_NAME_KR = '캐나다쉬핑';
+
+/* ────── 로고 (base64 임베드) ────── */
+const LOGO_B64 = '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yE2AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB//9k=';
+document.getElementById('logo-img').src = 'data:image/jpeg;base64,' + LOGO_B64;
+
+/* ────── 운임표 (2026.04 기준, 단위: 원) ────── */
+const RATE_TABLE = [
+  [1.0, 57500], [1.5, 65100], [2.0, 71200], [2.5, 75400], [3.0, 83800],
+  [3.5, 88700], [4.0, 93800], [4.5, 99700], [5.0, 105500], [5.5, 119500],
+  [6.0, 128800], [6.5, 134500], [7.0, 139800], [7.5, 144500], [8.0, 149800],
+  [8.5, 155400], [9.0, 160700], [9.5, 166200], [10.0, 171500], [10.5, 175900],
+  [11.0, 180500], [11.5, 185200], [12.0, 189300], [12.5, 193800], [13.0, 198500],
+  [13.5, 203500], [14.0, 207300], [14.5, 211900], [15.0, 222500], [15.5, 227600],
+  [16.0, 232600], [16.5, 237700], [17.0, 242700], [17.5, 247800], [18.0, 252800],
+  [18.5, 257900], [19.0, 262900], [19.5, 268000], [20.0, 273000], [21.0, 281100],
+  [22.0, 289200], [23.0, 297300], [24.0, 308900], [25.0, 321300]
+];
+
+const FUEL_SURCHARGE_RATE = 0.18;      // 긴급 유류 할증료 18%
+const USD_TO_CAD = 1.36;               // 환산 참고용 (변경 가능)
+const KRW_TO_CAD = 0.00099;            // 참고용
+
+/* ────── 부가요금 (원) ────── */
+const EXTRA_FEES = {
+  repack:   { krw: 10000, perBox: true,  label: '재포장/합포장' },
+  danpla:   { krw: 20000, perBox: true,  label: '단프라 박스 이용' },
+  multi:    { krw: 2000,  perBox: false, label: '합배송 입고 (건당)' },
+  remote:   { krw: 35000, perBox: false, label: '캐나다 외곽/소도시' }
+};
+
+/* ────── 발송 금지/제한 키워드 (한국→캐나다 항공택배 기준) ────── */
+const PROHIBITED_KEYWORDS = {
+  // 발송 불가 (항공 보안)
+  forbidden: {
+    label: '발송 불가 (항공 보안 규정)',
+    level: 'danger',
+    keys: [
+      'gas', 'spray', 'lighter', 'bond', 'glue', 'perfume', 'alcohol', 'cosmetic',
+      'disinfect', 'sanitizer', 'liquor', 'wine', 'beer', 'soju', 'whiskey',
+      'tobacco', 'cigarette', 'cigar', 'aerosol',
+      '가스', '스프레이', '라이터', '본드', '향수', '알코올', '화장품', '소독',
+      '주류', '술', '와인', '맥주', '소주', '담배', '에어로졸'
+    ]
+  },
+  // 통관 제한 (사전 문의 필수) — 육류 및 육류 베이스 제품 추가
+  restricted: {
+    label: '해외 통관 제한 (사전 문의 필수)',
+    level: 'warn',
+    keys: [
+      'kimchi', 'sauce', 'paste', 'fermented', 'ferment', 'seafood', 'dried',
+      'seed', 'extract', 'soybean', 'gochujang', 'doenjang',
+      'meat', 'beef', 'pork', 'chicken', 'ham', 'sausage', 'jerky',
+      'ramen', 'instant noodle', 'noodle soup', 'broth',
+      '김치', '장류', '된장', '고추장', '간장', '발효', '효소', '액기스',
+      '건조나물', '어패류', '말린', '씨앗', '종자',
+      '육류', '소고기', '돼지고기', '닭고기', '햄', '소시지', '육포',
+      '라면', '라면스프', '인스턴트', '컵라면', '국물'
+    ]
+  },
+  // MSDS 제출 시 발송 가능
+  msds: {
+    label: 'MSDS 제출 시 발송 가능 (리튬배터리 포함 제품)',
+    level: 'info',
+    keys: [
+      'battery', 'lithium', 'laptop', 'tablet', 'phone', 'fan', 'lantern',
+      'massage', 'massager', 'powerbank', 'power bank',
+      '배터리', '리튬', '노트북', '태블릿', '선풍기', '랜턴', '마사지', '보조배터리'
+    ]
+  }
+};
+
+/* ════════════════════════════════════════════════════════════════
+   상태 및 유틸
+   ════════════════════════════════════════════════════════════════ */
+let currentStep = 1;
+const totalSteps = 6;
+let lastFee = null; // 마지막 계산된 운임 객체
+
+function $(id) { return document.getElementById(id); }
+function num(s) {
+  if (s == null) return 0;
+  const v = parseFloat(String(s).replace(/[^\d.-]/g, ''));
+  return isFinite(v) ? v : 0;
+}
+function fmt(n) { return Math.round(n).toLocaleString('ko-KR'); }
+function fmtUSD(n) { return '$ ' + n.toFixed(2); }
+
+/* ════════════════════════════════════════════════════════════════
+   STEP NAVIGATION
+   ════════════════════════════════════════════════════════════════ */
+function showStep(n) {
+  for (let i = 1; i <= totalSteps; i++) {
+    $('panel-' + i).classList.toggle('active', i === n);
+    const tab = $('tab-' + i);
+    tab.classList.remove('active', 'done');
+    if (i === n) tab.classList.add('active');
+    else if (i < currentStep || i < n) tab.classList.add('done');
+  }
+  $('panel-done').classList.remove('active');
+  currentStep = Math.max(currentStep, n);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function nextStep(from) {
+  if (!validateStep(from)) return;
+  if (from === totalSteps - 1) buildSummary();
+  showStep(from + 1);
+}
+function prevStep(from) { showStep(from - 1); }
+
+// progress tabs 클릭 (앞으로 건너뛰기는 불가, 뒤로만 가능)
+document.querySelectorAll('.step-tab').forEach(t => {
+  t.addEventListener('click', () => {
+    const step = parseInt(t.dataset.step, 10);
+    if (step <= currentStep) showStep(step);
+  });
+});
+
+/* ════════════════════════════════════════════════════════════════
+   VALIDATION
+   ════════════════════════════════════════════════════════════════ */
+const KR_PHONE_RE = /^(01[016789]-\d{3,4}-\d{4}|0\d{1,2}-\d{3,4}-\d{4})$/;
+const CA_PHONE_RE = /^\d{3}-\d{3}-\d{4}$/;
+const CA_ZIP_RE   = /^[A-Z]\d[A-Z] \d[A-Z]\d$/;
+const EMAIL_RE    = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function showErr(id, show) {
+  const el = $(id);
+  if (!el) return;
+  el.classList.toggle('show', !!show);
+}
+function markInvalid(el, invalid) {
+  if (!el) return;
+  el.classList.toggle('invalid', !!invalid);
+}
+
+function validateStep(step) {
+  const required = {
+    1: [
+      { id: 's_name_kr', msg: '한글 성함을 입력해 주세요' },
+      { id: 's_name_en', msg: '영문 성함을 입력해 주세요' },
+      { id: 's_phone',   msg: '한국 연락처를 입력해 주세요', re: KR_PHONE_RE, errId: 's_phone_err' },
+      { id: 's_email',   msg: '이메일을 입력해 주세요', re: EMAIL_RE, errId: 's_email_err' },
+      { id: 's_addr1',   msg: '한국 주소를 입력해 주세요' }
+    ],
+    2: [
+      { id: 'r_name_en', msg: '수취인 영문 성함을 입력해 주세요' },
+      { id: 'r_phone',   msg: '캐나다 연락처를 입력해 주세요', re: CA_PHONE_RE, errId: 'r_phone_err' },
+      { id: 'r_addr1',   msg: '캐나다 주소를 입력해 주세요' },
+      { id: 'r_city',    msg: '도시를 입력해 주세요' },
+      { id: 'r_prov',    msg: '주(Province)를 선택해 주세요' },
+      { id: 'r_zip',     msg: '캐나다 우편번호를 입력해 주세요', re: CA_ZIP_RE, errId: 'r_zip_err' }
+    ],
+    3: [],
+    4: [],
+    5: [],
+    6: []
+  };
+
+  // clear previous err
+  ['s_phone_err','s_email_err','r_phone_err','r_zip_err'].forEach(id => showErr(id, false));
+
+  for (const f of (required[step] || [])) {
+    const el = $(f.id);
+    if (!el) continue;
+    const v = (el.value || '').trim();
+    if (!v) {
+      markInvalid(el, true);
+      el.focus();
+      setTimeout(() => markInvalid(el, false), 2500);
+      alert(f.msg);
+      return false;
+    }
+    if (f.re && !f.re.test(v)) {
+      markInvalid(el, true);
+      if (f.errId) showErr(f.errId, true);
+      el.focus();
+      return false;
+    }
+    if (f.validate && !f.validate(v)) {
+      markInvalid(el, true);
+      el.focus();
+      alert(f.msg);
+      return false;
+    }
+  }
+
+  // 박스 step3 검증: 최소 1개 박스가 유효한 무게를 가져야 함
+  if (step === 3) {
+    const validBoxes = state.boxes.filter(b => b.weight > 0);
+    if (validBoxes.length === 0) {
+      alert('박스의 실 무게를 입력해 주세요.');
+      return false;
+    }
+  }
+
+  // 품목 step4 별도 검증: 최소 1개 품목 + 발송 제한 안내 4개 모두 인지 체크
+  if (step === 4) {
+    const rows = document.querySelectorAll('.item-row');
+    let hasValidItem = false;
+    rows.forEach(r => {
+      const n = (r.querySelector('.item-name').value || '').trim();
+      const q = num(r.querySelector('.item-qty').value);
+      const p = num(r.querySelector('.item-price').value);
+      if (n && q > 0 && p >= 0) hasValidItem = true;
+    });
+    if (!hasValidItem) {
+      alert('최소 1개 이상의 품목을 입력해 주세요.');
+      return false;
+    }
+    // 발송 제한 안내 4개 모두 체크 확인
+    const restrictIds = ['restrict-1','restrict-2','restrict-3','restrict-4'];
+    const allChecked = restrictIds.every(id => $(id).checked);
+    if (!allChecked) {
+      alert('발송 제한 안내 항목을 모두 확인하시고 체크해 주세요.\n\n각 항목 좌측의 체크박스를 클릭해 인지 확인을 해주셔야 진행 가능합니다.');
+      // 첫 미체크 항목으로 스크롤
+      const first = restrictIds.find(id => !$(id).checked);
+      if (first) {
+        const row = document.getElementById(first).closest('.restrict-row');
+        row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        row.style.boxShadow = '0 0 0 3px rgba(220,38,38,0.3)';
+        setTimeout(() => { row.style.boxShadow = ''; }, 2000);
+      }
+      return false;
+    }
+  }
+
+  return true;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   PHONE FORMATTING
+   ════════════════════════════════════════════════════════════════ */
+function formatKoreanPhone(value) {
+  const digits = value.replace(/\D/g, '').slice(0, 11);
+  if (digits.length < 4) return digits;
+  if (digits.startsWith('02')) {
+    if (digits.length <= 5) return digits.slice(0,2) + '-' + digits.slice(2);
+    if (digits.length <= 9) return digits.slice(0,2) + '-' + digits.slice(2, digits.length-4) + '-' + digits.slice(-4);
+    return digits.slice(0,2) + '-' + digits.slice(2,6) + '-' + digits.slice(6,10);
+  }
+  if (digits.length === 11) {
+    return digits.slice(0,3) + '-' + digits.slice(3,7) + '-' + digits.slice(7);
+  }
+  if (digits.length === 10) {
+    return digits.slice(0,3) + '-' + digits.slice(3,6) + '-' + digits.slice(6);
+  }
+  if (digits.length >= 7) {
+    return digits.slice(0,3) + '-' + digits.slice(3, digits.length-4) + '-' + digits.slice(-4);
+  }
+  return digits.slice(0,3) + '-' + digits.slice(3);
+}
+function formatCanadaPhone(value) {
+  const digits = value.replace(/\D/g, '').slice(0, 10);
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 6) return digits.slice(0,3) + '-' + digits.slice(3);
+  return digits.slice(0,3) + '-' + digits.slice(3,6) + '-' + digits.slice(6,10);
+}
+
+function attachPhone(id, formatter, validRE, errId) {
+  const el = $(id);
+  if (!el) return;
+  el.addEventListener('input', () => {
+    el.value = formatter(el.value);
+    if (validRE) {
+      const ok = !el.value || validRE.test(el.value);
+      markInvalid(el, !ok && el.value.length > 0);
+      if (errId) showErr(errId, !ok && el.value.length >= 8);
+    }
+  });
+  el.addEventListener('blur', () => {
+    if (!el.value) return;
+    if (validRE && !validRE.test(el.value)) {
+      markInvalid(el, true);
+      if (errId) showErr(errId, true);
+    }
+  });
+}
+attachPhone('s_phone',     formatKoreanPhone, KR_PHONE_RE, 's_phone_err');
+attachPhone('pickup_phone',formatKoreanPhone, KR_PHONE_RE, null);
+attachPhone('r_phone',     formatCanadaPhone, CA_PHONE_RE, 'r_phone_err');
+
+/* 캐나다 우편번호 자동 형식 (A1A 1A1) */
+const rZip = $('r_zip');
+rZip.addEventListener('input', () => {
+  let v = rZip.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0,6);
+  if (v.length > 3) v = v.slice(0,3) + ' ' + v.slice(3);
+  rZip.value = v;
+  const ok = !v || CA_ZIP_RE.test(v);
+  markInvalid(rZip, !ok && v.length > 0);
+  showErr('r_zip_err', !ok && v.length >= 4);
+});
+
+/* 이메일 검증 */
+$('s_email').addEventListener('blur', () => {
+  const v = $('s_email').value.trim();
+  if (v && !EMAIL_RE.test(v)) {
+    markInvalid($('s_email'), true);
+    showErr('s_email_err', true);
+  } else {
+    markInvalid($('s_email'), false);
+    showErr('s_email_err', false);
+  }
+});
+
+/* 박스 수 숫자만 */
+$('box_cnt').addEventListener('input', e => {
+  e.target.value = e.target.value.replace(/\D/g, '').slice(0, 3) || '';
+});
+
+/* ════════════════════════════════════════════════════════════════
+   RADIO / CHECK CARD UX
+   ════════════════════════════════════════════════════════════════ */
+function bindRadioGroup(groupId, onSelect) {
+  const grp = $(groupId);
+  if (!grp) return;
+  grp.querySelectorAll('.radio-card').forEach(card => {
+    card.addEventListener('click', () => {
+      grp.querySelectorAll('.radio-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      card.querySelector('input[type="radio"]').checked = true;
+      if (onSelect) onSelect(card);
+    });
+  });
+}
+bindRadioGroup('pickup-grp', card => {
+  const v = card.dataset.pickup;
+  $('pickup-extra').style.display = (v === 'domestic') ? 'block' : 'none';
+});
+bindRadioGroup('delivery-grp', null);
+
+/* check card (다중 체크박스 카드) */
+document.querySelectorAll('.check-card').forEach(card => {
+  const cb = card.querySelector('input[type="checkbox"]');
+  card.addEventListener('click', e => {
+    if (e.target !== cb) cb.checked = !cb.checked;
+    card.classList.toggle('checked', cb.checked);
+    updateFinalFeeDisplay();
+  });
+});
+
+/* ════════════════════════════════════════════════════════════════
+   BOX 다중 입력 + 실시간 운임 계산
+   ════════════════════════════════════════════════════════════════ */
+
+// 상태 — 박스 배열
+const state = {
+  boxes: [
+    { weight: 0, l: 0, w: 0, h: 0, packing: '' }
+  ]
+};
+
+let boxInputTimer = null;
+function onBoxInput() {
+  if (boxInputTimer) clearTimeout(boxInputTimer);
+  boxInputTimer = setTimeout(() => {
+    readBoxesFromUI();
+    renderBoxFees();
+    updateFeeDisplay();
+  }, 250);
+}
+
+// 박스 카드 1개 HTML 생성
+function boxCardHTML(idx) {
+  return `
+    <div class="box-card" id="box-card-${idx}" data-idx="${idx}">
+      <div class="box-card-header">
+        <div class="box-card-title"><span class="box-num">${idx+1}</span> 박스 ${idx+1}</div>
+        <button type="button" class="box-card-del" onclick="removeBox(${idx})" ${state.boxes.length<=1?'disabled':''}>✕ 삭제</button>
+      </div>
+      <div class="grid4">
+        <div class="field">
+          <label>실 무게 (kg) <span class="req">*</span></label>
+          <input type="text" inputmode="decimal" class="box-weight" placeholder="0.0" data-idx="${idx}" oninput="onBoxInput()" />
+        </div>
+        <div class="field">
+          <label>가로 (cm)</label>
+          <input type="text" inputmode="decimal" class="box-l" placeholder="0" data-idx="${idx}" oninput="onBoxInput()" />
+        </div>
+        <div class="field">
+          <label>세로 (cm)</label>
+          <input type="text" inputmode="decimal" class="box-w" placeholder="0" data-idx="${idx}" oninput="onBoxInput()" />
+        </div>
+        <div class="field">
+          <label>높이 (cm)</label>
+          <input type="text" inputmode="decimal" class="box-h" placeholder="0" data-idx="${idx}" oninput="onBoxInput()" />
+        </div>
+        <div class="field span4">
+          <label>포장 종류 <span class="opt">(선택)</span></label>
+          <select class="box-packing" data-idx="${idx}" onchange="onBoxInput()">
+            <option value="">선택</option>
+            <option>COSHIP 박스 (10kg 소박스)</option>
+            <option>COSHIP 박스 (20kg 중박스)</option>
+            <option>COSHIP 박스 (30kg 대박스)</option>
+            <option>일반 종이 박스</option>
+            <option>우체국 박스</option>
+            <option>이민가방 / 캐리어</option>
+            <option>기타</option>
+          </select>
+        </div>
+      </div>
+      <div class="box-mini-fee" id="box-mini-fee-${idx}" style="display:none"></div>
+    </div>
+  `;
+}
+
+// 박스 카드 렌더링 + UI에 state 값 반영
+function renderBoxes() {
+  const wrap = $('boxes-wrap');
+  wrap.innerHTML = state.boxes.map((_, i) => boxCardHTML(i)).join('');
+  // state 값 input에 채우기
+  state.boxes.forEach((b, i) => {
+    const card = $('box-card-' + i);
+    if (b.weight) card.querySelector('.box-weight').value = b.weight;
+    if (b.l) card.querySelector('.box-l').value = b.l;
+    if (b.w) card.querySelector('.box-w').value = b.w;
+    if (b.h) card.querySelector('.box-h').value = b.h;
+    if (b.packing) card.querySelector('.box-packing').value = b.packing;
+  });
+  renderBoxFees();
+  updateFeeDisplay();
+}
+
+// UI input → state.boxes 반영
+function readBoxesFromUI() {
+  const cards = document.querySelectorAll('.box-card');
+  state.boxes = [];
+  cards.forEach(card => {
+    state.boxes.push({
+      weight: num(card.querySelector('.box-weight').value),
+      l: num(card.querySelector('.box-l').value),
+      w: num(card.querySelector('.box-w').value),
+      h: num(card.querySelector('.box-h').value),
+      packing: card.querySelector('.box-packing').value
+    });
+  });
+}
+
+// 박스 1개의 운임 계산
+function calcBoxFee(box) {
+  const realW = num(box.weight);
+  if (realW <= 0) return null;
+  const volW = (box.l && box.w && box.h) ? (box.l * box.w * box.h) / 5000 : 0;
+  const chargeW = Math.max(realW, volW);
+  if (chargeW > 25) {
+    return { over25: true, realW, volW, chargeW };
+  }
+  let rate = null, rateW = null;
+  for (const [w, r] of RATE_TABLE) {
+    if (chargeW <= w) { rate = r; rateW = w; break; }
+  }
+  if (rate == null) {
+    rate = RATE_TABLE[RATE_TABLE.length - 1][1];
+    rateW = RATE_TABLE[RATE_TABLE.length - 1][0];
+  }
+  const fuel = Math.round(rate * FUEL_SURCHARGE_RATE);
+  const subtotal = rate + fuel;
+  return { realW, volW, chargeW, rateW, rate, fuel, subtotal };
+}
+
+// 각 박스 카드 우측 작은 운임 표시
+function renderBoxFees() {
+  state.boxes.forEach((box, i) => {
+    const miniBox = $('box-mini-fee-' + i);
+    const card = $('box-card-' + i);
+    if (!miniBox) return;
+    const f = calcBoxFee(box);
+    if (!f) {
+      miniBox.style.display = 'none';
+      card.classList.remove('has-fee');
+      return;
+    }
+    miniBox.style.display = 'flex';
+    card.classList.add('has-fee');
+    if (f.over25) {
+      miniBox.className = 'box-mini-fee warn';
+      miniBox.innerHTML = `<span class="k">⚠️ 청구중량 ${f.chargeW.toFixed(2)}kg — 25kg 초과 (별도 문의)</span>`;
+    } else {
+      miniBox.className = 'box-mini-fee';
+      const volStr = f.volW > 0 ? ` (실${f.realW.toFixed(1)} / 부피${f.volW.toFixed(1)})` : ` (실${f.realW.toFixed(1)})`;
+      miniBox.innerHTML = `
+        <span class="k">청구중량 ${f.chargeW.toFixed(2)}kg → ${f.rateW}kg 구간${volStr}</span>
+        <span class="v">₩ ${fmt(f.subtotal)}</span>
+      `;
+    }
+  });
+  // 삭제 버튼 활성/비활성 토글
+  document.querySelectorAll('.box-card-del').forEach(btn => {
+    btn.disabled = state.boxes.length <= 1;
+  });
+}
+
+// 박스 추가/삭제
+function addBox() {
+  if (state.boxes.length >= 25) {
+    alert('박스는 최대 25개까지 입력 가능합니다. 더 많은 박스는 카카오톡 채널 또는 02-2043-5000으로 별도 문의 부탁드립니다.');
+    return;
+  }
+  readBoxesFromUI();
+  state.boxes.push({ weight: 0, l: 0, w: 0, h: 0, packing: '' });
+  renderBoxes();
+}
+function removeBox(idx) {
+  if (state.boxes.length <= 1) return;
+  readBoxesFromUI();
+  state.boxes.splice(idx, 1);
+  renderBoxes();
+}
+
+// 부가 요금 계산
+function calcExtraFees() {
+  const checks = {
+    repack: document.querySelector('[name=extra_repack]') ? document.querySelector('[name=extra_repack]').checked : false,
+    danpla: document.querySelector('[name=extra_danpla]') ? document.querySelector('[name=extra_danpla]').checked : false,
+    multi:  document.querySelector('[name=extra_multi]') ? document.querySelector('[name=extra_multi]').checked : false,
+    remote: document.querySelector('[name=extra_remote]') ? document.querySelector('[name=extra_remote]').checked : false
+  };
+  const boxCnt = state.boxes.length;
+  const list = [];
+  let total = 0;
+  for (const [k, on] of Object.entries(checks)) {
+    if (!on) continue;
+    const conf = EXTRA_FEES[k];
+    const amt = conf.perBox ? conf.krw * boxCnt : conf.krw;
+    list.push({ key: k, label: conf.label, amount: amt, perBox: conf.perBox });
+    total += amt;
+  }
+  return { list, total };
+}
+
+// 전체 운임 합계 박스
+function renderFeeBox(targetId, includeExtras) {
+  const target = $(targetId);
+  if (!target) return;
+
+  // 유효 박스만
+  const boxResults = state.boxes.map(b => ({ box: b, fee: calcBoxFee(b) }));
+  const validResults = boxResults.filter(r => r.fee !== null);
+
+  if (validResults.length === 0) {
+    target.innerHTML = '<div class="fee-empty">박스 무게를 입력하시면<br>예상 운임이 자동으로 계산됩니다</div>';
+    return;
+  }
+
+  // 25kg 초과 박스 있는지 체크
+  const overBoxes = validResults.filter(r => r.fee.over25);
+  if (overBoxes.length > 0) {
+    target.innerHTML = `
+      <div class="notice warn" style="margin:0">
+        <strong>⚠️ 25kg 초과 박스 ${overBoxes.length}개:</strong>
+        25kg를 초과하는 박스는 별도 문의가 필요합니다.<br>
+        카카오톡 채널(캐나다쉬핑) 또는 02-2043-5000으로 연락 부탁드립니다.
+      </div>`;
+    lastFee = null;
+    return;
+  }
+
+  // 박스별 소계 합산
+  let totalBase = 0, totalFuel = 0, totalSubtotal = 0;
+  let totalRealW = 0, totalVolW = 0, totalChargeW = 0;
+  validResults.forEach(r => {
+    totalBase += r.fee.rate;
+    totalFuel += r.fee.fuel;
+    totalSubtotal += r.fee.subtotal;
+    totalRealW += r.fee.realW;
+    totalVolW += r.fee.volW;
+    totalChargeW += r.fee.chargeW;
+  });
+
+  let html = `<div class="fee-box">
+    <div class="fee-box-title">📦 박스 ${validResults.length}개 박스별 합산</div>`;
+
+  // 박스별 라인
+  validResults.forEach((r, i) => {
+    const origIdx = state.boxes.indexOf(r.box);
+    html += `<div class="fee-row sub">
+      <span class="k">박스 ${origIdx+1} — 청구중량 ${r.fee.chargeW.toFixed(2)}kg → ${r.fee.rateW}kg 구간</span>
+      <span class="v">₩ ${fmt(r.fee.subtotal)}</span>
+    </div>`;
+  });
+
+  html += `<div class="fee-divider"></div>
+    <div class="fee-row"><span class="k">박스별 기본운임 합계</span><span class="v">₩ ${fmt(totalBase)}</span></div>
+    <div class="fee-row"><span class="k">긴급 유류 할증료 (18%)</span><span class="v" style="color:var(--red)">+ ₩ ${fmt(totalFuel)}</span></div>`;
+
+  let grandTotal = totalSubtotal;
+  if (includeExtras) {
+    const ex = calcExtraFees();
+    if (ex.list.length > 0) {
+      html += `<div class="fee-divider"></div>`;
+      for (const item of ex.list) {
+        html += `<div class="fee-row sub"><span class="k">${item.label}${item.perBox ? ' × ' + validResults.length : ''}</span><span class="v">+ ₩ ${fmt(item.amount)}</span></div>`;
+      }
+      grandTotal += ex.total;
+    }
+  }
+
+  html += `<div class="fee-divider"></div>
+    <div class="fee-row total">
+      <span class="k">예상 운임 합계</span>
+      <span class="v">₩ ${fmt(grandTotal)}</span>
+    </div>
+  </div>
+  <div class="fee-note">
+    ※ 부피중량 = (가로 × 세로 × 높이 cm) ÷ 5000<br>
+    ※ 실제 운임은 입고 후 측정된 중량/부피 기준으로 확정되며, 표시된 금액과 차이가 날 수 있습니다.
+  </div>`;
+
+  target.innerHTML = html;
+  lastFee = {
+    boxCount: validResults.length,
+    boxes: validResults.map(r => ({
+      realW: r.fee.realW,
+      volW: r.fee.volW,
+      chargeW: r.fee.chargeW,
+      rateW: r.fee.rateW,
+      rate: r.fee.rate,
+      fuel: r.fee.fuel,
+      subtotal: r.fee.subtotal
+    })),
+    totalBase, totalFuel, totalSubtotal,
+    grandTotal
+  };
+}
+
+function updateFeeDisplay() {
+  renderFeeBox('fee-display', false);
+}
+function updateFinalFeeDisplay() {
+  renderFeeBox('final-fee-display', true);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   ITEM ROWS (Invoice & Packing List)
+   ════════════════════════════════════════════════════════════════ */
+function addRow() {
+  const wrap = $('items-wrap');
+  const row = document.createElement('div');
+  row.className = 'item-row';
+  row.innerHTML = `
+    <input type="text" placeholder="e.g. Clothing, Book" class="item-name" oninput="checkProhibited()" />
+    <input type="text" inputmode="numeric" placeholder="1" class="item-qty" oninput="calcRow(this)" />
+    <input type="text" inputmode="decimal" placeholder="0.00" class="item-price" oninput="calcRow(this)" />
+    <input type="text" placeholder="0.00" class="item-sub" readonly />
+    <button class="btn-del" onclick="delRow(this)" type="button">✕</button>`;
+  wrap.appendChild(row);
+}
+function delRow(btn) {
+  const rows = document.querySelectorAll('.item-row');
+  if (rows.length <= 1) return;
+  btn.closest('.item-row').remove();
+  calcTotal();
+  checkProhibited();
+}
+function calcRow(input) {
+  const row = input.closest('.item-row');
+  if (input.classList.contains('item-qty')) {
+    input.value = input.value.replace(/[^\d]/g, '').slice(0, 6);
+  } else if (input.classList.contains('item-price')) {
+    input.value = input.value.replace(/[^\d.]/g, '');
+    const parts = input.value.split('.');
+    if (parts.length > 2) input.value = parts[0] + '.' + parts.slice(1).join('');
+  }
+  const qty = num(row.querySelector('.item-qty').value);
+  const price = num(row.querySelector('.item-price').value);
+  row.querySelector('.item-sub').value = (qty * price).toFixed(2);
+  calcTotal();
+}
+function calcTotal() {
+  let sumQty = 0, sumVal = 0;
+  document.querySelectorAll('.item-row').forEach(r => {
+    sumQty += num(r.querySelector('.item-qty').value);
+    sumVal += num(r.querySelector('.item-sub').value);
+  });
+  $('total-qty').innerHTML = fmt(sumQty) + ' <span class="small">개</span>';
+  $('total-val').innerHTML = 'CA$ ' + sumVal.toFixed(2);
+  renderDutyWarning(sumVal);
+}
+
+function renderDutyWarning(cadTotal) {
+  const box = $('duty-warning');
+  if (cadTotal <= 0) {
+    box.innerHTML = '';
+    return;
+  }
+  if (cadTotal <= 20) {
+    box.innerHTML = `<div class="notice info" style="margin:0">
+      <strong>신고금액: CAD ${cadTotal.toFixed(2)}</strong></div>`;
+  } else {
+    box.innerHTML = `<div class="notice warn" style="margin:0">
+      <strong>신고금액: CAD ${cadTotal.toFixed(2)}</strong><br>
+      <span style="font-size:0.78rem">캐나다 통관 시 품목·원산지 기준에 따라 GST/HST 및 특송사 통관 수수료(Brokerage Fee)가 수취인에게 청구될 수 있습니다.</span></div>`;
+  }
+}
+
+/* 금지 품목 키워드 감지 */
+function checkProhibited() {
+  const items = [];
+  document.querySelectorAll('.item-name').forEach(el => {
+    const v = (el.value || '').trim().toLowerCase();
+    if (v) items.push(v);
+  });
+  if (items.length === 0) {
+    $('prohibited-warning').innerHTML = '';
+    $('prohibited-warning').style.display = 'none';
+    return;
+  }
+  const hits = { forbidden: new Set(), restricted: new Set(), msds: new Set() };
+  for (const text of items) {
+    for (const [cat, conf] of Object.entries(PROHIBITED_KEYWORDS)) {
+      for (const k of conf.keys) {
+        if (text.includes(k.toLowerCase())) {
+          hits[cat].add(k);
+        }
+      }
+    }
+  }
+  let html = '';
+  for (const [cat, set] of Object.entries(hits)) {
+    if (set.size === 0) continue;
+    const conf = PROHIBITED_KEYWORDS[cat];
+    const icon = conf.level === 'danger' ? '🚫' : (conf.level === 'warn' ? '⚠️' : '📋');
+    html += `<div class="notice ${conf.level}" style="margin-bottom:10px">
+      <strong>${icon} ${conf.label}:</strong>
+      품목명에서 감지된 키워드 — <strong>${Array.from(set).join(', ')}</strong>
+    </div>`;
+  }
+  if (html) {
+    $('prohibited-warning').innerHTML = html;
+    $('prohibited-warning').style.display = 'block';
+  } else {
+    $('prohibited-warning').innerHTML = '';
+    $('prohibited-warning').style.display = 'none';
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SUMMARY
+   ════════════════════════════════════════════════════════════════ */
+const pickupLabels = {
+  dropoff: '한국지사 직접 입고',
+  domestic: '국내택배 픽업 요청 (서울/경기)'
+};
+const deliveryLabels = {
+  ups_door: 'UPS Door-to-Door 배송',
+  pickup_hq: '캐나다쉬핑 본사 픽업 (Coquitlam)',
+  pickup_lougheed: '로히드 택배방 픽업 (Burnaby)'
+};
+function buildSummary() {
+  const sNameKr = $('s_name_kr').value.trim();
+  const sNameEn = $('s_name_en').value.trim();
+  $('sum-s-name').textContent  = `${sNameKr} / ${sNameEn}`;
+  $('sum-s-phone').textContent = $('s_phone').value;
+  $('sum-s-email').textContent = $('s_email').value;
+  const sAddr = [$('s_addr1').value, $('s_addr2').value].filter(Boolean).join(', ');
+  const sZip  = $('s_zip').value ? ` (${$('s_zip').value})` : '';
+  $('sum-s-addr').textContent  = sAddr + sZip;
+
+  const pickup = document.querySelector('input[name=pickup_type]:checked').value;
+  let pickupStr = pickupLabels[pickup];
+  if (pickup === 'domestic') {
+    const pa = $('pickup_addr').value;
+    const pa2 = $('pickup_addr2') ? $('pickup_addr2').value : '';
+    const pd = $('pickup_date').value;
+    const pp = $('pickup_phone').value;
+    const parts = [];
+    if (pa) parts.push(`주소: ${pa}${pa2 ? ' ' + pa2 : ''}`);
+    if (pd) parts.push(`희망일: ${pd}`);
+    if (pp) parts.push(`연락처: ${pp}`);
+    if (parts.length) pickupStr += ' — ' + parts.join(' / ');
+  }
+  $('sum-pickup').textContent = pickupStr;
+
+  const rNameEn = $('r_name_en').value.trim();
+  const rNameKr = $('r_name_kr').value.trim();
+  $('sum-r-name').textContent  = rNameEn + (rNameKr ? ` (${rNameKr})` : '');
+  $('sum-r-phone').textContent = $('r_phone').value;
+  $('sum-r-email').textContent = $('r_email').value || '—';
+  $('sum-r-addr').textContent  = `${$('r_addr1').value}, ${$('r_city').value}, ${$('r_prov').value} ${$('r_zip').value}, CANADA`;
+  $('sum-delivery').textContent = deliveryLabels[document.querySelector('input[name=delivery_type]:checked').value];
+
+  readBoxesFromUI();
+  $('sum-box-cnt').textContent = state.boxes.length + ' 박스';
+  let weightLines = state.boxes.map((b, i) => {
+    const dim = (b.l && b.w && b.h) ? ` (${b.l}×${b.w}×${b.h}cm)` : '';
+    const pk = b.packing ? ' - ' + b.packing : '';
+    return `박스 ${i+1}: ${b.weight}kg${dim}${pk}`;
+  });
+  $('sum-weight').innerHTML = weightLines.join('<br>');
+  $('sum-dim').textContent = '— (위에 통합 표시)';
+  $('sum-pack').textContent = '— (위에 통합 표시)';
+  $('sum-note').textContent = $('box_note').value || '—';
+
+  let items = [];
+  document.querySelectorAll('.item-row').forEach(r => {
+    const n = r.querySelector('.item-name').value.trim();
+    const q = r.querySelector('.item-qty').value;
+    const p = r.querySelector('.item-price').value;
+    const s = r.querySelector('.item-sub').value;
+    if (n) items.push(`${n} × ${q} ($${p}) = $${s}`);
+  });
+  $('sum-items').innerHTML = items.length ? items.join('<br>') : '—';
+  $('sum-total-qty').textContent = $('total-qty').textContent.replace(/\s+/g,' ');
+  $('sum-total-val').textContent = $('total-val').textContent.replace(/\s+/g,' ');
+
+  const extras = [];
+  ['extra_repack','extra_danpla','extra_multi','extra_remote'].forEach(name => {
+    const el = document.querySelector(`[name=${name}]`);
+    if (el && el.checked) {
+      const key = name.replace('extra_','');
+      extras.push(EXTRA_FEES[key].label);
+    }
+  });
+  $('sum-extra').textContent = extras.length ? extras.join(', ') : '없음';
+
+  updateFinalFeeDisplay();
+  renderFeeBox('sum-fee-box', true);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SUBMIT
+   ════════════════════════════════════════════════════════════════ */
+function collectFormData() {
+  const items = [];
+  document.querySelectorAll('.item-row').forEach(r => {
+    const n = r.querySelector('.item-name').value.trim();
+    const q = r.querySelector('.item-qty').value;
+    const p = r.querySelector('.item-price').value;
+    const s = r.querySelector('.item-sub').value;
+    if (n && num(q) > 0) items.push({ name: n, qty: num(q), price: num(p), subtotal: num(s) });
+  });
+  const extras = [];
+  ['extra_repack','extra_danpla','extra_multi','extra_remote'].forEach(name => {
+    const el = document.querySelector(`[name=${name}]`);
+    if (el && el.checked) extras.push(name.replace('extra_',''));
+  });
+  return {
+    refNum: generateRefNum(),
+    timestamp: new Date().toISOString(),
+    direction: 'KR_TO_CA_AIR',
+    sender: {
+      nameKr: $('s_name_kr').value.trim(),
+      nameEn: $('s_name_en').value.trim(),
+      phone: $('s_phone').value,
+      email: $('s_email').value.trim(),
+      addr1: $('s_addr1').value.trim(),
+      addr2: $('s_addr2').value.trim(),
+      zip: $('s_zip').value
+    },
+    pickup: {
+      type: document.querySelector('input[name=pickup_type]:checked').value,
+      addr: $('pickup_addr').value,
+      addr2: ($('pickup_addr2') ? $('pickup_addr2').value : ''),
+      date: $('pickup_date').value,
+      phone: $('pickup_phone').value
+    },
+    recipient: {
+      nameEn: $('r_name_en').value.trim(),
+      nameKr: $('r_name_kr').value.trim(),
+      phone: $('r_phone').value,
+      email: $('r_email').value.trim(),
+      addr1: $('r_addr1').value.trim(),
+      city: $('r_city').value.trim(),
+      province: $('r_prov').value,
+      zip: $('r_zip').value,
+      country: 'CANADA'
+    },
+    delivery: document.querySelector('input[name=delivery_type]:checked').value,
+    box: {
+      count: state.boxes.length,
+      note: $('box_note').value,
+      items: state.boxes.map((b, i) => ({
+        idx: i + 1,
+        weight: b.weight,
+        dimL: b.l,
+        dimW: b.w,
+        dimH: b.h,
+        packing: b.packing
+      }))
+    },
+    items: items,
+    totals: {
+      qty: items.reduce((s,i)=>s+i.qty,0),
+      valueUSD: items.reduce((s,i)=>s+i.subtotal,0)
+    },
+    extras: extras,
+    fee: lastFee || null,
+    honeypot: $('hp_website').value
+  };
+}
+
+function generateRefNum() {
+  const d = new Date();
+  const ymd = d.getFullYear().toString().slice(-2)
+            + String(d.getMonth()+1).padStart(2,'0')
+            + String(d.getDate()).padStart(2,'0');
+  const rand = String(Math.floor(Math.random()*9000)+1000);
+  return 'CS-KA-' + ymd + '-' + rand;
+}
+
+async function submitForm() {
+  if (!$('agree1').checked || !$('agree2').checked || !$('agree3').checked) {
+    alert('필수 동의 항목을 모두 체크해 주세요.');
+    return;
+  }
+
+  if ($('hp_website').value) {
+    console.warn('Bot detected');
+    showDone(generateRefNum(), null);
+    return;
+  }
+
+  const btn = $('submit-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> 접수 중...';
+  $('loading-overlay').classList.add('show');
+
+  const data = collectFormData();
+
+  try {
+    // Apps Script URL이 설정되어 있는지 확인 (sed 버그 회피 패턴)
+    if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE' || APPS_SCRIPT_URL.indexOf('script.google.com') < 0) {
+      console.warn('Apps Script URL not configured. Showing local-only confirmation.');
+      await new Promise(r => setTimeout(r, 800));
+      showDone(data.refNum, 'local');
+      return;
+    }
+
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(data)
+    });
+
+    showDone(data.refNum, 'sent');
+  } catch (err) {
+    console.error('Submit error:', err);
+    alert('접수 중 오류가 발생했습니다. 카카오톡(캐나다쉬핑) 또는 02-2043-5000으로 직접 문의해 주세요.\n\n오류: ' + err.message);
+    btn.disabled = false;
+    btn.innerHTML = '접수 신청 완료 ✓';
+    $('loading-overlay').classList.remove('show');
+  }
+}
+
+function showDone(refNum, status) {
+  $('loading-overlay').classList.remove('show');
+  $('ref-num').textContent = refNum;
+  for (let i = 1; i <= totalSteps; i++) {
+    $('panel-' + i).classList.remove('active');
+    const tab = $('tab-' + i);
+    tab.classList.remove('active');
+    tab.classList.add('done');
+  }
+  $('panel-done').classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  if (status === 'local') {
+    const banner = document.createElement('div');
+    banner.className = 'notice warn';
+    banner.style.marginTop = '20px';
+    banner.innerHTML = '<strong>⚙️ 개발 모드:</strong> 백엔드가 설정되지 않아 데이터가 서버로 전송되지 않았습니다. 관리자에게 문의해 주세요.';
+    $('panel-done').querySelector('.card').appendChild(banner);
+  }
+}
+
+/* 다음(카카오) 우편번호 API */
+function searchKoreaAddress(addrId, zipId) {
+  if (typeof daum === 'undefined' || !daum.Postcode) {
+    if (window.__daumLoadFail) {
+      // 차선책: 직접 입력 모드로 전환
+      const el = document.getElementById(addrId);
+      el.removeAttribute('readonly');
+      el.placeholder = '주소를 직접 입력해 주세요';
+      el.focus();
+      alert('주소 검색 서비스에 연결할 수 없어 직접 입력 모드로 전환됩니다.\n주소를 수동으로 입력해 주세요.');
+      if (zipId) {
+        const zEl = document.getElementById(zipId);
+        if (zEl) {
+          zEl.removeAttribute('readonly');
+          zEl.placeholder = '우편번호';
+        }
+      }
+    } else {
+      alert('주소 검색 서비스를 불러오는 중입니다. 페이지를 새로고침 하시거나 잠시 후 다시 시도해 주세요.\n\n(클로드 채팅 미리보기에서는 외부 스크립트 차단으로 작동하지 않을 수 있습니다. 실제 브라우저에서 파일을 열어주세요.)');
+    }
+    return;
+  }
+  new daum.Postcode({
+    oncomplete: function(data) {
+      // 도로명주소 우선, 없으면 지번주소
+      let addr = data.roadAddress || data.jibunAddress;
+      // 참고항목(법정동/건물명) 추가
+      let extras = [];
+      if (data.bname && /[동|로|가]$/g.test(data.bname)) extras.push(data.bname);
+      if (data.buildingName && data.apartment === 'Y') extras.push(data.buildingName);
+      if (extras.length) addr += ' (' + extras.join(', ') + ')';
+      const addrEl = document.getElementById(addrId);
+      addrEl.value = addr;
+      addrEl.classList.remove('invalid');
+      if (zipId) {
+        const zipEl = document.getElementById(zipId);
+        if (zipEl) zipEl.value = data.zonecode;
+      }
+      // 상세주소 input으로 포커스
+      const detailMap = { 's_addr1': 's_addr2', 'pickup_addr': 'pickup_addr2' };
+      if (detailMap[addrId]) {
+        const det = document.getElementById(detailMap[addrId]);
+        if (det) det.focus();
+      }
+    }
+  }).open();
+}
+
+/* ════════════════════════════════════════════════════════════════
+   INIT
+   ════════════════════════════════════════════════════════════════ */
+
+/* 약관 동의 토글 (label>a 클릭 충돌 방지용) */
+function toggleAgree(id) {
+  const cb = document.getElementById(id);
+  cb.checked = !cb.checked;
+  const row = cb.closest('.check-row');
+  row.classList.toggle('on', cb.checked);
+}
+
+/* 발송 제한 인지 체크 */
+function toggleRestrict(id) {
+  const cb = document.getElementById(id);
+  cb.checked = !cb.checked;
+  const row = cb.closest('.restrict-row');
+  row.classList.toggle('on', cb.checked);
+}
+
+// 인라인 onclick에서 호출 가능하도록 글로벌 노출
+window.addBox = addBox;
+window.removeBox = removeBox;
+window.toggleAgree = toggleAgree;
+window.toggleRestrict = toggleRestrict;
+window.searchKoreaAddress = searchKoreaAddress;
+window.onBoxInput = onBoxInput;
+window.nextStep = nextStep;
+window.prevStep = prevStep;
+window.showStep = showStep;
+window.addRow = addRow;
+window.delRow = delRow;
+window.calcRow = calcRow;
+window.checkProhibited = checkProhibited;
+window.submitForm = submitForm;
+
+renderBoxes();
+calcTotal();
+checkProhibited();
+</script>
+</body>
+</html>
